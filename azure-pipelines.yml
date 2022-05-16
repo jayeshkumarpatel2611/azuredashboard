@@ -13,10 +13,10 @@ variables:
   idntenantid: 'f8c75af9-d48f-4600-9db9-00d1325b865a'
   envcode: '4'
   serviceconn_name: 'AzureConnection'
-  tfresourcegroupname: 'POH'
-  tfstorageaccountname: 'tfstorageac15'
-  azureRmContainerName: 'terraform'
-  tfstatefile: 'terraform.tfstate'
+  backend_resource_group: 'POH'
+  backend_storage_account: 'tfstorageac15'
+  backend_container_name: 'terraform'
+  backend_tfstate_file_name: 'terraform.tfstate'
 
 stages:
   - stage: 
@@ -48,10 +48,10 @@ stages:
               command: "init"
               backendServiceArm: $(serviceconn_name)
               backendType: "azurerm"
-              backendAzureRmResourceGroupName: $(tfresourcegroupname)
-              backendAzureRmStorageAccountName: $(tfstorageaccountname)
-              backendAzureRmContainerName: $(azureRmContainerName)
-              backendAzureRmKey: $(tfstatefile)
+              backendAzureRmResourceGroupName: $(backend_resource_group)
+              backendAzureRmStorageAccountName: $(backend_storage_account)
+              backendAzureRmContainerName: $(backend_container_name)
+              backendAzureRmKey: $(backend_tfstate_file_name)
               allowTelemetryCollection: true
               workingDirectory: $(System.DefaultWorkingDirectory)
 
