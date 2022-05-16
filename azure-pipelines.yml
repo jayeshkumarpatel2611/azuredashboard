@@ -33,6 +33,7 @@ stages:
               escapeType: none
               tokenPrefix: '#{'
               tokenSuffix: '}#'
+              verbosity: detailed
 
   - stage: 
     displayName: "Deploying Terraform Resources"
