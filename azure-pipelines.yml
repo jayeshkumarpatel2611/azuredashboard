@@ -4,7 +4,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  location: 'east us'
+  location: 'eastus'
   AppInsights: 'poh-4-f8c75af9-d48f-4600-9db9-00d1325b865a-client1-dev-ai'
   subscription_id: '2daf7420-f7f4-4e0f-8a65-8dd8f147545b'
   environment_name: 'dev'
