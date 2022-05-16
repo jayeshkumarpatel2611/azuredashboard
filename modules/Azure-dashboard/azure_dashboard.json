@@ -1,0 +1,1548 @@
+{
+"lenses": {
+  "0": {
+    "order": 0,
+    "parts": {
+      "0": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "colSpan": 5,
+          "rowSpan": 3
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${perf_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "Performance Analysis - AllIn",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let apps = range i from 1 to 1 step 1\\r\\n| extend x = '{Apps:name}'\\r\\n| extend x = split(x, ', ')\\r\\n| mvexpand x to typeof(string) limit 100\\r\\n| project appName = x;\\r\\nrequests\\r\\n| summarize Metric = {Metric}, Count = count() by appName\\r\\n| join kind = inner (\\r\\n    requests\\r\\n    | make-series Trend = {Metric} default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\\r\\n) on appName\\r\\n| project-away appName1, timestamp\\r\\n| join kind = fullouter (apps) on appName\\r\\n| extend appName = appName1, Metric = iff(appName == '', 0.0, Metric), Count = iff(appName == '', 0, Count), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\\r\\n| extend MetricKind = '{Metric:label}', Relevance = Metric * Count\\r\\n| where appName <> \\\"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\\\"\\r\\n| order by Relevance desc\\r\\n\",\"size\":3,\"title\":\"Application Perfromance Analysis\",\"timeContextFromParameter\":\"TimeRange\",\"showRefreshButton\":true,\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"visualization\":\"tiles\",\"tileSettings\":{\"titleContent\":{\"columnMatch\":\"appName\",\"formatter\":1},\"subtitleContent\":{\"columnMatch\":\"MetricKind\",\"formatter\":1},\"leftContent\":{\"columnMatch\":\"Metric\",\"formatter\":12,\"formatOptions\":{\"min\":0,\"palette\":\"blue\"},\"numberFormat\":{\"unit\":23,\"options\":{\"style\":\"decimal\",\"maximumFractionDigits\":2,\"maximumSignificantDigits\":3}}},\"secondaryContent\":{\"columnMatch\":\"Trend\",\"formatter\":9,\"formatOptions\":{\"palette\":\"blue\"}},\"showBorder\":false}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Metric": {
+                  "type": 2,
+                  "value": "percentile(duration, 95)",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "p95",
+                  "displayName": "Metric",
+                  "formattedValue": "percentile(duration, 95)"
+                },
+                "Sources": {
+                  "type": 2,
+                  "value": "requests",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Requests",
+                  "displayName": "Sources",
+                  "formattedValue": "requests"
+                },
+                "Count": {
+                  "type": 2,
+                  "value": "user_Id",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Anonymous Users",
+                  "displayName": "Count",
+                  "formattedValue": "user_Id"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart"
+        }
+      },
+      "1": {
+        "position": {
+          "x": 5,
+          "y": 0,
+          "colSpan": 13,
+          "rowSpan": 9
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/AppMapGalPt",
+          "settings": {},
+          "asset": {
+            "idInputName": "ComponentId",
+            "type": "ApplicationInsights"
+          }
+        }
+      },
+      "2": {
+        "position": {
+          "x": 0,
+          "y": 3,
+          "colSpan": 5,
+          "rowSpan": 3
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${perf_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "Performance Analysis - AllIn",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let apps = range i from 1 to 1 step 1\\r\\n| extend x = '{Apps:name}'\\r\\n| extend x = split(x, ', ')\\r\\n| mvexpand x to typeof(string) limit 100\\r\\n| project appName = x;\\r\\n{Sources}\\r\\n| summarize Users = dcount({Count}) by appName\\r\\n| join kind = inner (\\r\\n    requests\\r\\n    | make-series Trend = dcount({Count}) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\\r\\n) on appName\\r\\n| project-away appName1, timestamp\\r\\n| join kind = fullouter (apps) on appName\\r\\n| extend appName = appName1, Users = iff(appName == '', 0, Users), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\\r\\n| extend MetricKind = 'Unique Users'\\r\\n| where appName <> \\\"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\\\"\\r\\n| order by Users desc\",\"size\":4,\"title\":\"Application Usage Analysis\",\"color\":\"green\",\"timeContextFromParameter\":\"TimeRange\",\"showRefreshButton\":true,\"showExportToExcel\":true,\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"visualization\":\"tiles\",\"tileSettings\":{\"titleContent\":{\"columnMatch\":\"appName\",\"formatter\":1},\"leftContent\":{\"columnMatch\":\"Users\",\"formatter\":12,\"formatOptions\":{\"min\":0,\"palette\":\"blue\"},\"numberFormat\":{\"unit\":17,\"options\":{\"style\":\"decimal\",\"maximumFractionDigits\":2,\"maximumSignificantDigits\":3}}},\"secondaryContent\":{\"columnMatch\":\"Trend\",\"formatter\":9,\"formatOptions\":{\"palette\":\"blue\"}},\"showBorder\":false}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Metric": {
+                  "type": 2,
+                  "value": "percentile(duration, 95)",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "p95",
+                  "displayName": "Metric",
+                  "formattedValue": "percentile(duration, 95)"
+                },
+                "Sources": {
+                  "type": 2,
+                  "value": "requests",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Requests",
+                  "displayName": "Sources",
+                  "formattedValue": "requests"
+                },
+                "Count": {
+                  "type": 2,
+                  "value": "user_Id",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Anonymous Users",
+                  "displayName": "Count",
+                  "formattedValue": "user_Id"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart"
+        }
+      },
+      "3": {
+        "position": {
+          "x": 0,
+          "y": 6,
+          "colSpan": 5,
+          "rowSpan": 3
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${perf_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "Performance Analysis - AllIn",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let apps = range i from 1 to 1 step 1\\r\\n| extend x = '{Apps:name}'\\r\\n| extend x = split(x, ', ')\\r\\n| mvexpand x to typeof(string) limit 100\\r\\n| project appName = x;\\r\\nrequests\\r\\n| summarize FailedRequests = countif(success == false), Count = count() by appName\\r\\n| join kind = inner (\\r\\n    requests\\r\\n    | make-series Trend = countif(success == false) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\\r\\n) on appName\\r\\n| project-away appName1, timestamp\\r\\n| join kind = fullouter (apps) on appName\\r\\n| extend appName = appName1, FailedRequests = iff(appName == '', 0, FailedRequests), Count = iff(appName == '', 0, Count), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\\r\\n| extend MetricKind = 'Failures'\\r\\n| where appName <> \\\"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\\\"\\r\\n| order by FailedRequests desc\",\"size\":4,\"title\":\"Application Failure Analysis\",\"timeContextFromParameter\":\"TimeRange\",\"showRefreshButton\":true,\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"visualization\":\"tiles\",\"tileSettings\":{\"titleContent\":{\"columnMatch\":\"appName\",\"formatter\":1},\"leftContent\":{\"columnMatch\":\"FailedRequests\",\"formatter\":12,\"formatOptions\":{\"min\":0,\"palette\":\"red\"},\"numberFormat\":{\"unit\":17,\"options\":{\"style\":\"decimal\"}}},\"secondaryContent\":{\"columnMatch\":\"Trend\",\"formatter\":9,\"formatOptions\":{\"palette\":\"red\"}},\"showBorder\":false}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Metric": {
+                  "type": 2,
+                  "value": "percentile(duration, 95)",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "p95",
+                  "displayName": "Metric",
+                  "formattedValue": "percentile(duration, 95)"
+                },
+                "Sources": {
+                  "type": 2,
+                  "value": "requests",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Requests",
+                  "displayName": "Sources",
+                  "formattedValue": "requests"
+                },
+                "Count": {
+                  "type": 2,
+                  "value": "user_Id",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Anonymous Users",
+                  "displayName": "Count",
+                  "formattedValue": "user_Id"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart"
+        }
+      },
+      "4": {
+        "position": {
+          "x": 0,
+          "y": 9,
+          "colSpan": 16,
+          "rowSpan": 4
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${failure_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "All In - Failure Analysis",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let appCount = 5;\\r\\nlet requestCount = 5;\\r\\nlet selectedApps = range i from 1 to 1 step 1\\r\\n| extend x = '{Apps:name}'\\r\\n| extend x = split(x, ', ')\\r\\n| mvexpand x to typeof(string) limit 100\\r\\n| project appName = x;\\r\\nlet topItems = requests\\r\\n| top-nested appCount of appName by AppMetric = countif(success == false) desc, top-nested requestCount of name by RequestMetric = countif(success == false) desc;\\r\\nlet topApps = topItems | summarize by appName;\\r\\nlet topRequests = topItems | summarize by strcat(appName, '::', name);\\r\\nlet rawData = requests\\r\\n| extend name = iff(strcat(appName, '::', name) in (topRequests), name, 'Other Requests'), appName = iff(appName in (topApps), appName, 'Other Apps');\\r\\nlet apps = rawData\\r\\n| summarize FailedRequests = countif(success == false), AllRequests = count(), Users = dcount(user_Id) by appName\\r\\n| project Id = appName, ParentId = '', Name = strcat('☁️ ', appName), Kind = 'Application', FailedRequests, AllRequests, Users\\r\\n| join kind = inner (\\r\\n    rawData\\r\\n    | make-series Trend = countif(success == false) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by Id = appName\\r\\n) on Id\\r\\n| project-away Id1, timestamp\\r\\n| join kind = fullouter (selectedApps) on $left.Id == $right.appName\\r\\n| extend Id = appName, Name = strcat('☁️ ', appName), Kind = 'Application', FailedRequests = iff(Id == '', 0, FailedRequests), AllRequests = iff(Id == '', 0, AllRequests), Users = iff(Id == '', 0, Users), Trend = iff(Id == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend);\\r\\nlet requests = rawData\\r\\n| summarize FailedRequests = countif(success == false), AllRequests = count(), Users = dcount(user_Id) by appName, name\\r\\n| project Id = strcat(appName, '::', name), ParentId = appName, Name = strcat('🌐 ', name), Kind = 'Request', FailedRequests, AllRequests, Users\\r\\n| join kind = inner (\\r\\n    rawData\\r\\n    | make-series Trend = countif(success == false) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by Id = strcat(appName, '::', name)\\r\\n) on Id\\r\\n| project-away Id1, timestamp;\\r\\nrequests\\r\\n| union (apps)\\r\\n| extend Rank = iff(Name contains 'Other Apps' or Name contains 'Other Requests', 2, 1)\\r\\n| order by Rank asc, FailedRequests desc\\r\\n| project Id, ParentId, Name, Kind, ['Failed Requests'] = FailedRequests, ['Failed Request Trend'] = Trend, ['All Requests'] = AllRequests, ['Success Rate'] = 1.0 * (AllRequests - FailedRequests) / AllRequests, Users\",\"size\":0,\"noDataMessage\":\"The Application Insights resource you selected has no data.\",\"timeContextFromParameter\":\"TimeRange\",\"exportParameterName\":\"Row\",\"exportDefaultValue\":\"{}\",\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"Id\",\"formatter\":5},{\"columnMatch\":\"ParentId\",\"formatter\":5},{\"columnMatch\":\"Failed Requests\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"palette\":\"red\"},\"numberFormat\":{\"unit\":17,\"options\":{\"style\":\"decimal\"}}},{\"columnMatch\":\"Failed Request Trend\",\"formatter\":9,\"formatOptions\":{\"min\":0,\"max\":1,\"palette\":\"greenRed\"}},{\"columnMatch\":\"All Requests\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"palette\":\"blue\"},\"numberFormat\":{\"unit\":17,\"options\":{\"style\":\"decimal\"}}},{\"columnMatch\":\"Success Rate\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"max\":1,\"palette\":\"green\"},\"numberFormat\":{\"unit\":0,\"options\":{\"style\":\"percent\",\"maximumFractionDigits\":2}}},{\"columnMatch\":\"Users\",\"formatter\":0,\"numberFormat\":{\"unit\":17,\"options\":{\"style\":\"decimal\",\"maximumFractionDigits\":1}}}],\"filter\":true,\"hierarchySettings\":{\"idColumn\":\"Id\",\"parentColumn\":\"ParentId\",\"treeType\":0,\"expanderColumn\":\"Name\",\"expandTopLevel\":true}}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart",
+          "partHeader": {
+            "title": "Failure Analysis",
+            "subtitle": ""
+          }
+        }
+      },
+      "5": {
+        "position": {
+          "x": 0,
+          "y": 13,
+          "colSpan": 8,
+          "rowSpan": 5
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${failure_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "All In - Failure Analysis",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let row = dynamic({Row});\\r\\nrequests\\r\\n| where '{Row}' == '{}' or (row.Kind == 'Application' and row.Id == appName) or (row.Kind == 'Request' and row.Id == strcat(appName, \\\"::\\\", name))\\r\\n| make-series Metric = countif(success == false) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain}\\r\\n| mvexpand timestamp to typeof(datetime), Metric to typeof(int) limit 1000\\r\\n| project timestamp, ['Failed Requests'] = Metric\",\"size\":0,\"color\":\"red\",\"noDataMessage\":\"The Application Insights resource you selected has no data.\",\"timeContextFromParameter\":\"TimeRange\",\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"visualization\":\"areachart\"}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Row": {
+                  "value": "{}",
+                  "formattedValue": "{}",
+                  "labelValue": "{}",
+                  "type": 1
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart",
+          "partHeader": {
+            "title": "Failed Requests",
+            "subtitle": ""
+          }
+        }
+      },
+      "6": {
+        "position": {
+          "x": 8,
+          "y": 13,
+          "colSpan": 8,
+          "rowSpan": 5
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${failure_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "All In - Failure Analysis",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let row = dynamic({Row});\\r\\nrequests\\r\\n| where '{Row}' == '{}' or (row.Kind == 'Application' and row.Id == appName) or (row.Kind == 'Request' and row.Id == strcat(appName, \\\"::\\\", name))\\r\\n| make-series Metric = count() default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain}\\r\\n| mvexpand timestamp to typeof(datetime), Metric to typeof(int) limit 1000\\r\\n| project timestamp, ['All Requests'] = Metric\",\"size\":0,\"color\":\"green\",\"noDataMessage\":\"The Application Insights resource you selected has no data.\",\"timeContextFromParameter\":\"TimeRange\",\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"visualization\":\"areachart\"}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Row": {
+                  "value": "{}",
+                  "formattedValue": "{}",
+                  "labelValue": "{}",
+                  "type": 1
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart",
+          "partHeader": {
+            "title": "Total Requests",
+            "subtitle": ""
+          }
+        }
+      },
+      "7": {
+        "position": {
+          "x": 0,
+          "y": 18,
+          "colSpan": 16,
+          "rowSpan": 4
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "resourceTypeMode",
+              "isOptional": true
+            },
+            {
+              "name": "ComponentId",
+              "isOptional": true
+            },
+            {
+              "name": "Scope",
+              "value": {
+                "resourceIds": [
+                  "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/microsoft.insights/components/${AppInsights}"
+                ]
+              },
+              "isOptional": true
+            },
+            {
+              "name": "PartId",
+              "value": "10956509-13cc-495a-a581-17f8631b3ba4",
+              "isOptional": true
+            },
+            {
+              "name": "Version",
+              "value": "2.0",
+              "isOptional": true
+            },
+            {
+              "name": "TimeRange",
+              "value": "P3D",
+              "isOptional": true
+            },
+            {
+              "name": "DashboardId",
+              "isOptional": true
+            },
+            {
+              "name": "DraftRequestParameters",
+              "isOptional": true
+            },
+            {
+              "name": "Query",
+              "value": "requests\n//| distinct cloud_RoleInstance\n//| where cloud_RoleInstance == \"FHIRD210ES\"\n| extend IDNTenantId_ = tostring(customDimensions.IDNTenantId)\n| extend AspNetCoreEnvironment_ = tostring(customDimensions.AspNetCoreEnvironment)\n| extend POHUser = tostring(customDimensions.[\"POH-User\"])\n| extend TenantId_ = tostring(customDimensions.TenantId)\n| extend _MS_ProcessedByMetricExtractors_ = tostring(customDimensions.[\"_MS.ProcessedByMetricExtractors\"])\n| where resultCode !contains \"20\"\n\n",
+              "isOptional": true
+            },
+            {
+              "name": "ControlType",
+              "value": "FrameControlChart",
+              "isOptional": true
+            },
+            {
+              "name": "SpecificChart",
+              "value": "Pie",
+              "isOptional": true
+            },
+            {
+              "name": "PartTitle",
+              "value": "Analytics",
+              "isOptional": true
+            },
+            {
+              "name": "PartSubTitle",
+              "value": "${AppInsights}",
+              "isOptional": true
+            },
+            {
+              "name": "Dimensions",
+              "value": {
+                "xAxis": {
+                  "name": "resultCode",
+                  "type": "string"
+                },
+                "yAxis": [
+                  {
+                    "name": "itemCount",
+                    "type": "int"
+                  }
+                ],
+                "splitBy": [],
+                "aggregation": "Sum"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "LegendOptions",
+              "value": {
+                "isEnabled": true,
+                "position": "Bottom"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "IsQueryContainTimeRange",
+              "value": false,
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart",
+          "settings": {
+            "content": {
+              "SpecificChart": "UnstackedColumn",
+              "PartTitle": "Request Failure by HTTP Status",
+              "Dimensions": {
+                "xAxis": {
+                  "name": "timestamp",
+                  "type": "datetime"
+                },
+                "yAxis": [
+                  {
+                    "name": "itemCount",
+                    "type": "int"
+                  }
+                ],
+                "splitBy": [
+                  {
+                    "name": "resultCode",
+                    "type": "string"
+                  }
+                ],
+                "aggregation": "Sum"
+              }
+            }
+          }
+        }
+      },
+      "8": {
+        "position": {
+          "x": 0,
+          "y": 22,
+          "colSpan": 16,
+          "rowSpan": 4
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "resourceTypeMode",
+              "isOptional": true
+            },
+            {
+              "name": "ComponentId",
+              "isOptional": true
+            },
+            {
+              "name": "Scope",
+              "value": {
+                "resourceIds": [
+                  "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/microsoft.insights/components/${AppInsights}"
+                ]
+              },
+              "isOptional": true
+            },
+            {
+              "name": "PartId",
+              "value": "4de1433f-713a-4141-86ad-5344312e6137",
+              "isOptional": true
+            },
+            {
+              "name": "Version",
+              "value": "2.0",
+              "isOptional": true
+            },
+            {
+              "name": "TimeRange",
+              "value": "P3D",
+              "isOptional": true
+            },
+            {
+              "name": "DashboardId",
+              "isOptional": true
+            },
+            {
+              "name": "DraftRequestParameters",
+              "isOptional": true
+            },
+            {
+              "name": "Query",
+              "value": "requests\n//| distinct cloud_RoleInstance\n//| where cloud_RoleInstance == \"FHIRD210ES\"\n| extend IDNTenantId_ = tostring(customDimensions.IDNTenantId)\n| extend AspNetCoreEnvironment_ = tostring(customDimensions.AspNetCoreEnvironment)\n| extend POHUser = tostring(customDimensions.[\"POH-User\"])\n| extend TenantId_ = tostring(customDimensions.TenantId)\n| extend _MS_ProcessedByMetricExtractors_ = tostring(customDimensions.[\"_MS.ProcessedByMetricExtractors\"])\n| where resultCode !contains \"20\"\n| where url !contains \"400\"\n| summarize count() by resultCode, url\n| top 10 by count_ desc\n",
+              "isOptional": true
+            },
+            {
+              "name": "ControlType",
+              "value": "FrameControlChart",
+              "isOptional": true
+            },
+            {
+              "name": "SpecificChart",
+              "value": "UnstackedColumn",
+              "isOptional": true
+            },
+            {
+              "name": "PartTitle",
+              "value": "Analytics",
+              "isOptional": true
+            },
+            {
+              "name": "PartSubTitle",
+              "value": "${AppInsights}",
+              "isOptional": true
+            },
+            {
+              "name": "Dimensions",
+              "value": {
+                "xAxis": {
+                  "name": "url",
+                  "type": "string"
+                },
+                "yAxis": [
+                  {
+                    "name": "count_",
+                    "type": "long"
+                  }
+                ],
+                "splitBy": [],
+                "aggregation": "Sum"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "LegendOptions",
+              "value": {
+                "isEnabled": true,
+                "position": "Bottom"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "IsQueryContainTimeRange",
+              "value": false,
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart",
+          "settings": {
+            "content": {
+              "Query": "requests\n//| distinct cloud_RoleInstance\n//| where cloud_RoleInstance == \"FHIRD210ES\"\n| extend IDNTenantId_ = tostring(customDimensions.IDNTenantId)\n| extend AspNetCoreEnvironment_ = tostring(customDimensions.AspNetCoreEnvironment)\n| extend POHUser = tostring(customDimensions.[\"POH-User\"])\n| extend TenantId_ = tostring(customDimensions.TenantId)\n| extend _MS_ProcessedByMetricExtractors_ = tostring(customDimensions.[\"_MS.ProcessedByMetricExtractors\"])\n| where resultCode !contains \"20\"\n| where url !contains \"400\"\n| summarize count() by resultCode, url\n| top 10 by count_ desc\n\n",
+              "SpecificChart": "Pie",
+              "PartTitle": "Top 10 Failed API"
+            }
+          }
+        }
+      },
+      "9": {
+        "position": {
+          "x": 0,
+          "y": 26,
+          "colSpan": 16,
+          "rowSpan": 5
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "Azure Monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${usage_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "Azure Monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "All In - Usage Analysis",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let appCount = 5;\\r\\nlet requestCount = 5;\\r\\nlet selectedApps = range i from 1 to 1 step 1\\r\\n| extend x = '{Apps:name}'\\r\\n| extend x = split(x, ', ')\\r\\n| mvexpand x to typeof(string) limit 100\\r\\n| project appName = x;\\r\\nlet topItems = union {Sources}\\r\\n| top-nested appCount of appName by AppMetric = dcount({Count}) desc, top-nested requestCount of name by RequestMetric = dcount({Count}) desc;\\r\\nlet topApps = topItems | summarize by appName;\\r\\nlet topRequests = topItems | summarize by strcat(appName, '::', name);\\r\\nlet rawData = union {Sources}\\r\\n| extend name = iff(strcat(appName, '::', name) in (topRequests), name, 'Other {Sources}'), appName = iff(appName in (topApps), appName, 'Other Apps');\\r\\nlet apps = rawData\\r\\n| summarize Users = dcount({Count}), Sessions = dcount(session_Id), Views = count() by appName\\r\\n| project Id = appName, ParentId = '', Name = strcat('☁️ ', appName), Kind = 'Application', Users, Sessions, Views\\r\\n| join kind = inner (\\r\\n    rawData\\r\\n    | make-series Trend = dcount({Count}) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by Id = appName\\r\\n) on Id\\r\\n| project-away Id1, timestamp\\r\\n| join kind = fullouter (selectedApps) on $left.Id == $right.appName\\r\\n| extend Id = appName, Name = strcat('☁️ ', appName), Kind = 'Application', Users = iff(Id == '', 0, Users), Sessions = iff(Id == '', 0, Sessions), Views = iff(Id == '', 0, Views), Trend = iff(Id == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend);\\r\\nlet requests = rawData\\r\\n| summarize Users = dcount({Count}), Sessions = dcount(session_Id), Views = count()  by appName, name, itemType\\r\\n| project Id = strcat(appName, '::', name), ParentId = appName, Name = strcat(case(itemType == \\\"customEvent\\\", \\\"⚡\\\", itemType == \\\"pageView\\\", \\\"📃\\\", \\\"🌐\\\"), ' ', name), Kind = case(itemType == \\\"customEvent\\\", \\\"Custom Event\\\", itemType == \\\"pageView\\\", \\\"Page View\\\", \\\"Request\\\"), Users, Sessions, Views\\r\\n| join kind = inner (\\r\\n    rawData\\r\\n    | make-series Trend = dcount({Count}) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by Id = strcat(appName, '::', name)\\r\\n) on Id\\r\\n| project-away Id1, timestamp;\\r\\nrequests\\r\\n| union (apps)\\r\\n| extend Rank = iff(Name contains 'Other Apps' or Name contains 'Other {Sources}', 2, 1)\\r\\n| order by Rank asc, Users desc, Sessions desc, Views desc\\r\\n| project Id, ParentId, Name, Kind, ['Unique Users'] = Users, ['Unique Users Trend'] = Trend, ['Unique Sessions'] = Sessions, Views\",\"size\":3,\"noDataMessage\":\"The Application Insights resource you selected has no data.\",\"timeContextFromParameter\":\"TimeRange\",\"exportParameterName\":\"Row\",\"exportDefaultValue\":\"{}\",\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"Id\",\"formatter\":5,\"formatOptions\":{\"showIcon\":true}},{\"columnMatch\":\"ParentId\",\"formatter\":5,\"formatOptions\":{\"showIcon\":true}},{\"columnMatch\":\"Unique Users\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"palette\":\"blue\",\"showIcon\":true}},{\"columnMatch\":\"Unique Users Trend\",\"formatter\":9,\"formatOptions\":{\"min\":0,\"palette\":\"blue\",\"showIcon\":true}},{\"columnMatch\":\"Unique Sessions\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"palette\":\"green\",\"showIcon\":true}},{\"columnMatch\":\"Views\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"palette\":\"yellow\",\"showIcon\":true}}],\"filter\":true,\"hierarchySettings\":{\"idColumn\":\"Id\",\"parentColumn\":\"ParentId\",\"treeType\":0,\"expanderColumn\":\"Name\",\"expandTopLevel\":true}}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 604800000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 7 days",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 7 days"
+                },
+                "Sources": {
+                  "type": 2,
+                  "value": "requests",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Requests",
+                  "displayName": "Sources",
+                  "formattedValue": "requests"
+                },
+                "Count": {
+                  "type": 2,
+                  "value": "user_Id",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Anonymous Users",
+                  "displayName": "Count",
+                  "formattedValue": "user_Id"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart",
+          "partHeader": {
+            "title": "Usage Analysis",
+            "subtitle": ""
+          }
+        }
+      },
+      "10": {
+        "position": {
+          "x": 0,
+          "y": 31,
+          "colSpan": 16,
+          "rowSpan": 4
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "resourceTypeMode",
+              "isOptional": true
+            },
+            {
+              "name": "ComponentId",
+              "isOptional": true
+            },
+            {
+              "name": "Scope",
+              "value": {
+                "resourceIds": [
+                  "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/microsoft.insights/components/${AppInsights}"
+                ]
+              },
+              "isOptional": true
+            },
+            {
+              "name": "PartId",
+              "value": "114bf68a-7c94-4abc-9b80-c38122125652",
+              "isOptional": true
+            },
+            {
+              "name": "Version",
+              "value": "2.0",
+              "isOptional": true
+            },
+            {
+              "name": "TimeRange",
+              "value": "P3D",
+              "isOptional": true
+            },
+            {
+              "name": "DashboardId",
+              "isOptional": true
+            },
+            {
+              "name": "DraftRequestParameters",
+              "isOptional": true
+            },
+            {
+              "name": "Query",
+              "value": "requests\n//| distinct cloud_RoleInstance\n//| where cloud_RoleInstance == \"FHIRD210ES\"\n| extend IDNTenantId_ = tostring(customDimensions.IDNTenantId)\n| extend AspNetCoreEnvironment_ = tostring(customDimensions.AspNetCoreEnvironment)\n| extend POHUser = tostring(customDimensions.[\"POH-User\"])\n| extend TenantId_ = tostring(customDimensions.TenantId)\n| extend _MS_ProcessedByMetricExtractors_ = tostring(customDimensions.[\"_MS.ProcessedByMetricExtractors\"])\n//| where resultCode contains \"20\"\n| summarize avgRequestDuration=avg(duration / 1000) by bin(timestamp, 1m), url // use a time grain of 10 minutes\n| render timechart\n\n",
+              "isOptional": true
+            },
+            {
+              "name": "ControlType",
+              "value": "FrameControlChart",
+              "isOptional": true
+            },
+            {
+              "name": "SpecificChart",
+              "value": "Line",
+              "isOptional": true
+            },
+            {
+              "name": "PartTitle",
+              "value": "Analytics",
+              "isOptional": true
+            },
+            {
+              "name": "PartSubTitle",
+              "value": "${AppInsights}",
+              "isOptional": true
+            },
+            {
+              "name": "Dimensions",
+              "value": {
+                "xAxis": {
+                  "name": "timestamp",
+                  "type": "datetime"
+                },
+                "yAxis": [
+                  {
+                    "name": "avgRequestDuration",
+                    "type": "real"
+                  }
+                ],
+                "splitBy": [
+                  {
+                    "name": "url",
+                    "type": "string"
+                  }
+                ],
+                "aggregation": "Sum"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "LegendOptions",
+              "value": {
+                "isEnabled": true,
+                "position": "Bottom"
+              },
+              "isOptional": true
+            },
+            {
+              "name": "IsQueryContainTimeRange",
+              "value": false,
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart",
+          "settings": {
+            "content": {
+              "PartTitle": "Incoming Request Duration (Average)"
+            }
+          }
+        }
+      },
+      "11": {
+        "position": {
+          "x": 0,
+          "y": 35,
+          "colSpan": 7,
+          "rowSpan": 5
+        },
+        "metadata": {
+          "inputs": [
+            {
+              "name": "ComponentId",
+              "value": "azure monitor",
+              "isOptional": true
+            },
+            {
+              "name": "TimeContext",
+              "value": null,
+              "isOptional": true
+            },
+            {
+              "name": "ResourceIds",
+              "value": [
+                "azure monitor"
+              ],
+              "isOptional": true
+            },
+            {
+              "name": "ConfigurationId",
+              "value": "${perf_analysis_workbook}",
+              "isOptional": true
+            },
+            {
+              "name": "Type",
+              "value": "workbook",
+              "isOptional": true
+            },
+            {
+              "name": "GalleryResourceType",
+              "value": "azure monitor",
+              "isOptional": true
+            },
+            {
+              "name": "PinName",
+              "value": "Performance Analysis - AllIn",
+              "isOptional": true
+            },
+            {
+              "name": "StepSettings",
+              "value": "{\"version\":\"KqlItem/1.0\",\"query\":\"let services = customMetrics  \\r\\n    | where name == \\\"HeartbeatState\\\" and cloud_RoleName != ''\\r\\n    | distinct cloud_RoleName, cloud_RoleInstance;\\r\\n\\r\\nlet available = customMetrics  \\r\\n    | where name == \\\"HeartbeatState\\\"\\r\\n    | summarize ServiceTime = max(timestamp) by cloud_RoleName, cloud_RoleInstance\\r\\n    | where ServiceTime > ago(6m);\\r\\n\\r\\nservices\\r\\n| project cloud_RoleName, cloud_RoleInstance, Status = \\\"Not Available\\\"\\r\\n| join kind=leftanti available on cloud_RoleName and cloud_RoleInstance\\r\\n\",\"size\":1,\"showAnalytics\":true,\"title\":\"Application Service Monitoring\",\"showRefreshButton\":true,\"showExportToExcel\":true,\"queryType\":0,\"resourceType\":\"microsoft.insights/components\",\"crossComponentResources\":[\"{Apps}\"],\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"Status\",\"formatter\":18,\"formatOptions\":{\"thresholdsOptions\":\"icons\",\"thresholdsGrid\":[{\"operator\":\"Default\",\"thresholdValue\":null,\"representation\":\"Unavailable\",\"text\":\"{0}{1}\"}]}}]}}",
+              "isOptional": true
+            },
+            {
+              "name": "ParameterValues",
+              "value": {
+                "DefaultSubscription_Internal": {
+                  "type": 1,
+                  "value": "${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${subscription_id}",
+                  "displayName": "DefaultSubscription_Internal",
+                  "formattedValue": "${subscription_id}"
+                },
+                "Subscription": {
+                  "type": 6,
+                  "value": "/subscriptions/${subscription_id}",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "hos-pop-4-001-sub",
+                  "displayName": "Subscription",
+                  "formattedValue": "/subscriptions/${subscription_id}"
+                },
+                "Apps": {
+                  "type": 5,
+                  "value": [
+                    "/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}"
+                  ],
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "${AppInsights}",
+                  "displayName": "Apps",
+                  "formattedValue": "'/subscriptions/${subscription_id}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/components/${AppInsights}'"
+                },
+                "TimeRange": {
+                  "type": 4,
+                  "value": {
+                    "durationMs": 86400000
+                  },
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Last 24 hours",
+                  "displayName": "TimeRange",
+                  "formattedValue": "Last 24 hours"
+                },
+                "Metric": {
+                  "type": 2,
+                  "value": "percentile(duration, 95)",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "p95",
+                  "displayName": "Metric",
+                  "formattedValue": "percentile(duration, 95)"
+                },
+                "Sources": {
+                  "type": 2,
+                  "value": "requests",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Requests",
+                  "displayName": "Sources",
+                  "formattedValue": "requests"
+                },
+                "Count": {
+                  "type": 2,
+                  "value": "user_Id",
+                  "isPending": false,
+                  "isWaiting": false,
+                  "isFailed": false,
+                  "isGlobal": false,
+                  "labelValue": "Anonymous Users",
+                  "displayName": "Count",
+                  "formattedValue": "user_Id"
+                }
+              },
+              "isOptional": true
+            },
+            {
+              "name": "Location",
+              "value": "${location}",
+              "isOptional": true
+            }
+          ],
+          "type": "Extension/AppInsightsExtension/PartType/PinnedNotebookQueryPart",
+          "filters": {
+            "MsPortalFx_TimeRange": {
+              "model": {
+                "format": "utc",
+                "granularity": "5m",
+                "relative": "30m"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}, "metadata": {
+  "model": {
+    "timeRange": {
+      "value": {
+        "relative": {
+          "duration": 24,
+          "timeUnit": 1
+        }
+      },
+      "type": "MsPortalFx.Composition.Configuration.ValueTypes.TimeRange"
+    },
+    "filterLocale": {
+      "value": "en-us"
+    },
+    "filters": {
+      "value": {
+        "MsPortalFx_TimeRange": {
+          "model": {
+            "format": "utc",
+            "granularity": "auto",
+            "relative": "24h"
+          },
+          "displayCache": {
+            "name": "UTC Time",
+            "value": "Past 24 hours"
+          },
+          "filteredPartIds": [
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0a9",
+            "StartboardPart-AppMapGalPt-e3f7cea7-8fae-410d-a571-847661c1a0ab",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0ad",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0af",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0b1",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0b3",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0b5",
+            "StartboardPart-LogsDashboardPart-e3f7cea7-8fae-410d-a571-847661c1a0b7",
+            "StartboardPart-LogsDashboardPart-e3f7cea7-8fae-410d-a571-847661c1a0b9",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0bb",
+            "StartboardPart-LogsDashboardPart-e3f7cea7-8fae-410d-a571-847661c1a0bd",
+            "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0bf"
+          ]
+        }
+      }
+    }
+  }
+}
+
+}

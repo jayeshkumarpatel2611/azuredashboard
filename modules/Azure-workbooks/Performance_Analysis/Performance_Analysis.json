@@ -1,0 +1,540 @@
+{
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Application_Insights": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Application Insights Instance Name"
+      }
+    },
+    "Subscription_Id": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Subscription Id"
+      }
+    },
+    "ResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group Name"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Resource Group Location"
+      }
+    },
+    "workbookName": {
+      "type": "string",
+      "defaultValue": "Performance Analysis - AllIn",
+      "metadata": {
+        "description": "The friendly name for the workbook that is used in the Gallery or Saved List.  This name must be unique within a resource group."
+      }
+    },
+    "workbookDisplayName": {
+      "type": "string",
+      "defaultValue": "Performance Analysis - AllIn",
+      "metadata": {
+        "description": "The friendly name for the workbook that is used in the Gallery or Saved List.  This name must be unique within a resource group."
+      }
+    },
+    "workbookType": {
+      "type": "string",
+      "defaultValue": "workbook",
+      "metadata": {
+        "description": "The gallery that the workbook will been shown under. Supported values include workbook, tsg, etc. Usually, this is 'workbook'"
+      }
+    },
+    "workbookSourceId": {
+      "type": "string",
+      "defaultValue": "azure monitor",
+      "metadata": {
+        "description": "The id of resource instance to which the workbook will be associated"
+      }
+    },
+    "workbookId": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "The unique guid for this workbook instance"
+      }
+    }
+  },
+  "variables": {
+    "workbookContent": {
+      "version": "Notebook/1.0",
+      "items": [
+        {
+          "type": 1,
+          "content": {
+            "json": "## Performance Analysis - AllIn"
+          },
+          "name": "text - 0"
+        },
+        {
+          "type": 9,
+          "content": {
+            "version": "KqlParameterItem/1.0",
+            "parameters": [
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "DefaultSubscription_Internal",
+                "type": 1,
+                "query": "where type =~ 'microsoft.insights/components'\r\n| take 1\r\n| project subscriptionId",
+                "crossComponentResources": [
+                  "value::selected"
+                ],
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "Subscription",
+                "value": "[parameters('Subscription_Id')]",
+                "type": 6,
+                "isRequired": true,
+                "query": "summarize by subscriptionId\r\n| project value = strcat(\"/subscriptions/\", subscriptionId), label = subscriptionId, selected = iff(subscriptionId =~ '{DefaultSubscription_Internal}', true, false)\r\n",
+                "crossComponentResources": [
+                  "value::selected"
+                ],
+                "typeSettings": {
+                  "additionalResourceOptions": []
+                },
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "Apps",
+                "value": [
+                  "/subscriptions/[parameters('Subscription_Id')]/resourceGroups/[parameters('ResourceGroup')]/providers/Microsoft.Insights/components/[parameters('Application_Insights')]"
+                ],
+                "type": 5,
+                "isRequired": true,
+                "multiSelect": true,
+                "quote": "'",
+                "delimiter": ",",
+                "query": "where type =~ 'microsoft.insights/components'\r\n| project id",
+                "crossComponentResources": [
+                  "{Subscription}",
+                  "value::selected"
+                ],
+                "typeSettings": {
+                  "resourceTypeFilter": {
+                    "microsoft.insights/components": true
+                  },
+                  "limitSelectTo": 5,
+                  "additionalResourceOptions": [
+                    "value::3"
+                  ]
+                },
+                "timeContext": {
+                  "durationMs": 86400000
+                },
+                "queryType": 1,
+                "resourceType": "microsoft.resourcegraph/resources"
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "TimeRange",
+                "type": 4,
+                "value": {
+                  "durationMs": 86400000
+                },
+                "typeSettings": {
+                  "selectableValues": [
+                    {
+                      "durationMs": 300000
+                    },
+                    {
+                      "durationMs": 900000
+                    },
+                    {
+                      "durationMs": 1800000
+                    },
+                    {
+                      "durationMs": 3600000
+                    },
+                    {
+                      "durationMs": 14400000
+                    },
+                    {
+                      "durationMs": 43200000
+                    },
+                    {
+                      "durationMs": 86400000
+                    },
+                    {
+                      "durationMs": 172800000
+                    },
+                    {
+                      "durationMs": 259200000
+                    },
+                    {
+                      "durationMs": 604800000
+                    }
+                  ]
+                },
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "Metric",
+                "type": 2,
+                "value": "percentile(duration, 95)",
+                "typeSettings": {
+                  "additionalResourceOptions": []
+                },
+                "jsonData": "[[\r\n    { \"value\":\"avg(duration)\", \"label\":\"Mean\", \"selected\":true},\r\n    { \"value\":\"percentile(duration, 50)\", \"label\":\"Median\", \"selected\":false},\r\n    { \"value\":\"percentile(duration, 80)\", \"label\":\"p80\", \"selected\":false},\r\n    { \"value\":\"percentile(duration, 95)\", \"label\":\"p95\", \"selected\":false},\r\n    { \"value\":\"percentile(duration, 99)\", \"label\":\"p99\", \"selected\":false}\r\n]",
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "Sources",
+                "type": 2,
+                "isRequired": true,
+                "value": "requests",
+                "typeSettings": {
+                  "additionalResourceOptions": [],
+                  "showDefault": false
+                },
+                "jsonData": "[[\r\n    {\"value\": \"pageViews\", \"label\":\"Page Views\", \"selected\": true},\r\n    {\"value\": \"customEvents\", \"label\":\"Custom Events\"},\r\n    {\"value\": \"requests\", \"label\":\"Requests\"}\r\n]",
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              },
+              {
+                "version": "KqlParameterItem/1.0",
+                "name": "Count",
+                "type": 2,
+                "isRequired": true,
+                "typeSettings": {
+                  "additionalResourceOptions": []
+                },
+                "jsonData": "[[\r\n    {\"value\":\"user_Id\", \"label\":\"Anonymous Users\", \"selected\":true },\r\n    {\"value\":\"user_AuthenticatedId\", \"label\":\"Authenticated Users\" }\r\n]",
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              }
+            ],
+            "style": "pills",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          "name": "parameters - 1"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let apps = range i from 1 to 1 step 1\r\n| extend x = '{Apps:name}'\r\n| extend x = split(x, ', ')\r\n| mvexpand x to typeof(string) limit 100\r\n| project appName = x;\r\n{Sources}\r\n| summarize Users = dcount({Count}) by appName\r\n| join kind = inner (\r\n    requests\r\n    | make-series Trend = dcount({Count}) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\r\n) on appName\r\n| project-away appName1, timestamp\r\n| join kind = fullouter (apps) on appName\r\n| extend appName = appName1, Users = iff(appName == '', 0, Users), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\r\n| extend MetricKind = 'Unique Users'\r\n| where appName <> \"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\"\r\n| order by Users desc",
+            "size": 4,
+            "title": "Application Usage Analysis",
+            "color": "green",
+            "timeContextFromParameter": "TimeRange",
+            "showRefreshButton": true,
+            "showExportToExcel": true,
+            "queryType": 0,
+            "resourceType": "microsoft.insights/components",
+            "crossComponentResources": [
+              "{Apps}"
+            ],
+            "visualization": "tiles",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "appName",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Users",
+                "formatter": 12,
+                "formatOptions": {
+                  "min": 0,
+                  "palette": "blue"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "style": "decimal",
+                    "maximumFractionDigits": 2,
+                    "maximumSignificantDigits": 3
+                  }
+                }
+              },
+              "secondaryContent": {
+                "columnMatch": "Trend",
+                "formatter": 9,
+                "formatOptions": {
+                  "palette": "blue"
+                }
+              },
+              "showBorder": false
+            }
+          },
+          "customWidth": "33",
+          "showPin": true,
+          "name": "query - 2",
+          "styleSettings": {
+            "maxWidth": "33",
+            "showBorder": true
+          }
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let apps = range i from 1 to 1 step 1\r\n| extend x = '{Apps:name}'\r\n| extend x = split(x, ', ')\r\n| mvexpand x to typeof(string) limit 100\r\n| project appName = x;\r\nrequests\r\n| summarize FailedRequests = countif(success == false), Count = count() by appName\r\n| join kind = inner (\r\n    requests\r\n    | make-series Trend = countif(success == false) default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\r\n) on appName\r\n| project-away appName1, timestamp\r\n| join kind = fullouter (apps) on appName\r\n| extend appName = appName1, FailedRequests = iff(appName == '', 0, FailedRequests), Count = iff(appName == '', 0, Count), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\r\n| extend MetricKind = 'Failures'\r\n| where appName <> \"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\"\r\n| order by FailedRequests desc",
+            "size": 4,
+            "title": "Application Failure Analysis",
+            "timeContextFromParameter": "TimeRange",
+            "showRefreshButton": true,
+            "queryType": 0,
+            "resourceType": "microsoft.insights/components",
+            "crossComponentResources": [
+              "{Apps}"
+            ],
+            "visualization": "tiles",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "appName",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "FailedRequests",
+                "formatter": 12,
+                "formatOptions": {
+                  "min": 0,
+                  "palette": "red"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "style": "decimal"
+                  }
+                }
+              },
+              "secondaryContent": {
+                "columnMatch": "Trend",
+                "formatter": 9,
+                "formatOptions": {
+                  "palette": "red"
+                }
+              },
+              "showBorder": false
+            }
+          },
+          "customWidth": "33",
+          "showPin": true,
+          "name": "Failure Analysis",
+          "styleSettings": {
+            "maxWidth": "33",
+            "showBorder": true
+          }
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let apps = range i from 1 to 1 step 1\r\n| extend x = '{Apps:name}'\r\n| extend x = split(x, ', ')\r\n| mvexpand x to typeof(string) limit 100\r\n| project appName = x;\r\nrequests\r\n| summarize Metric = {Metric}, Count = count() by appName\r\n| join kind = inner (\r\n    requests\r\n    | make-series Trend = {Metric} default = 0 on timestamp from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by appName\r\n) on appName\r\n| project-away appName1, timestamp\r\n| join kind = fullouter (apps) on appName\r\n| extend appName = appName1, Metric = iff(appName == '', 0.0, Metric), Count = iff(appName == '', 0, Count), Trend = iff(appName == '', repeat(0, toint(({TimeRange:end} - {TimeRange:start}) / {TimeRange:grain})), Trend)\r\n| extend MetricKind = '{Metric:label}', Relevance = Metric * Count\r\n| where appName <> \"poh-4-56436729-31a0-4790-8f80-ecb663a5e8e3-Allscripts Hosting Root Domain-SCMT03L-eastus2-ai\"\r\n| order by Relevance desc\r\n",
+            "size": 3,
+            "title": "Application Performance Analysis",
+            "timeContextFromParameter": "TimeRange",
+            "showRefreshButton": true,
+            "queryType": 0,
+            "resourceType": "microsoft.insights/components",
+            "crossComponentResources": [
+              "{Apps}"
+            ],
+            "visualization": "tiles",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "appName",
+                "formatter": 1
+              },
+              "subtitleContent": {
+                "columnMatch": "MetricKind",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Metric",
+                "formatter": 12,
+                "formatOptions": {
+                  "min": 0,
+                  "palette": "blue"
+                },
+                "numberFormat": {
+                  "unit": 23,
+                  "options": {
+                    "style": "decimal",
+                    "maximumFractionDigits": 2,
+                    "maximumSignificantDigits": 3
+                  }
+                }
+              },
+              "secondaryContent": {
+                "columnMatch": "Trend",
+                "formatter": 9,
+                "formatOptions": {
+                  "palette": "blue"
+                }
+              },
+              "showBorder": false
+            }
+          },
+          "customWidth": "33",
+          "showPin": true,
+          "name": "Performance Analysis",
+          "styleSettings": {
+            "maxWidth": "33",
+            "showBorder": true
+          }
+        },
+        {
+          "type": 10,
+          "content": {
+            "version": "MetricsItem/2.0",
+            "size": 1,
+            "chartType": 2,
+            "resourceType": "microsoft.insights/components",
+            "metricScope": 0,
+            "resourceParameter": "Apps",
+            "resourceIds": [
+              "{Apps}"
+            ],
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "metrics": [
+              {
+                "namespace": "microsoft.insights/components",
+                "metric": "microsoft.insights/components-Performance Counters-performanceCounters/processCpuPercentage",
+                "aggregation": 3,
+                "splitBy": "cloud/roleInstance"
+              }
+            ],
+            "title": "Max Process CPU for AllIn by VM",
+            "gridSettings": {
+              "rowLimit": 10000
+            }
+          },
+          "name": "Max Process CPU for AllIn by VM"
+        },
+        {
+          "type": 10,
+          "content": {
+            "version": "MetricsItem/2.0",
+            "size": 1,
+            "chartType": 2,
+            "resourceType": "microsoft.insights/components",
+            "metricScope": 0,
+            "resourceParameter": "Apps",
+            "resourceIds": [
+              "{Apps}"
+            ],
+            "timeContext": {
+              "durationMs": 3600000
+            },
+            "metrics": [
+              {
+                "namespace": "microsoft.insights/components",
+                "metric": "microsoft.insights/components-Performance Counters-performanceCounters/memoryAvailableBytes",
+                "aggregation": 3,
+                "splitBy": "cloud/roleInstance"
+              }
+            ],
+            "title": "Max Available memory for AllIn by VM",
+            "gridSettings": {
+              "rowLimit": 10000
+            }
+          },
+          "name": "Max Available memory for AllIn by VM"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let services = customMetrics  \r\n    | where name == \"HeartbeatState\" and cloud_RoleName != ''\r\n    | distinct cloud_RoleName, cloud_RoleInstance;\r\n\r\nlet available = customMetrics  \r\n    | where name == \"HeartbeatState\"\r\n    | summarize ServiceTime = max(timestamp) by cloud_RoleName, cloud_RoleInstance\r\n    | where ServiceTime > ago(6m);\r\n\r\nservices\r\n| project cloud_RoleName, cloud_RoleInstance, Status = \"Not Available\"\r\n| join kind=leftanti available on cloud_RoleName and cloud_RoleInstance\r\n",
+            "size": 1,
+            "showAnalytics": true,
+            "title": "Application Service Monitoring",
+            "showRefreshButton": true,
+            "showExportToExcel": true,
+            "queryType": 0,
+            "resourceType": "microsoft.insights/components",
+            "crossComponentResources": [
+              "{Apps}"
+            ],
+            "gridSettings": {
+              "formatters": [
+                {
+                  "columnMatch": "Status",
+                  "formatter": 18,
+                  "formatOptions": {
+                    "thresholdsOptions": "icons",
+                    "thresholdsGrid": [
+                      {
+                        "operator": "Default",
+                        "thresholdValue": null,
+                        "representation": "Unavailable",
+                        "text": "{0}{1}"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "customWidth": "50",
+          "showPin": true,
+          "name": "Service Monitoring",
+          "styleSettings": {
+            "maxWidth": "500"
+          }
+        }
+      ],
+      "isLocked": false,
+      "fallbackResourceIds": [
+        "azure monitor"
+      ]
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('workbookId')]",
+      "type": "microsoft.insights/workbooks",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2018-06-17-preview",
+      "dependsOn": [],
+      "kind": "shared",
+      "properties": {
+        "displayName": "[parameters('workbookName')]",
+        "serializedData": "[string(variables('workbookContent'))]",
+        "version": "1.0",
+        "sourceId": "[parameters('workbookSourceId')]",
+        "category": "[parameters('workbookType')]"
+      }
+    }
+  ],
+  "outputs": {
+    "workbookId": {
+      "type": "string",
+      "value": "[resourceId( 'microsoft.insights/workbooks', parameters('workbookId'))]"
+    }
+  },
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+}
