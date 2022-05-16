@@ -68,7 +68,7 @@ stages:
               command: 'plan'
               workingDirectory: $(System.DefaultWorkingDirectory)
               environmentServiceName: $(serviceconn_name)
-              commandOptions: '-out=tfplan'
+              commandOptions: '--out=$(System.DefaultWorkingDirectory)/plan.tfplan'
               allowTelemetryCollection: true
                       
           - task: TerraformCLI@0
