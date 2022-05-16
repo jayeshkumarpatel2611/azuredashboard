@@ -23,7 +23,8 @@ stages:
     displayName: "Preparing terraform.tfvars"
     
     jobs:
-      - job:     
+      - job: preparing_terraform_tfvars
+        timeoutInMinutes: 180    
         steps:
           - task: replacetokens@5
             displayName: 'Replace tokens in terraform files $(System.DefaultWorkingDirectory)/*.tfvars'
@@ -37,7 +38,8 @@ stages:
     displayName: "Deploying Terraform Resources"
     
     jobs:
-      - job:
+      - job: terraform_provisioning
+        timeoutInMinutes: 180
         steps:
           - task: TerraformCLI@0
             displayName: "terraform init"
