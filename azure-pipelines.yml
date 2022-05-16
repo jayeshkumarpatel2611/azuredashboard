@@ -11,7 +11,7 @@ variables:
   serviceconn_name: 'AzureConnection'
   tfresourcegroupname: 'POH'
   tfstorageaccountname: 'tfstorageac15'
-  azureRmContainerName: 'container'
+  azureRmContainerName: 'terraform'
   tfstatefile: 'terraform.tfstate'
 
 stages:
@@ -22,9 +22,9 @@ stages:
       - job:     
         steps:
           - task: replacetokens@5
-            displayName: 'Replace tokens in terraform files **/*.tfvars'
+            displayName: 'Replace tokens in terraform files $(System.DefaultWorkingDirectory)/*.tfvars'
             inputs:
-              targetFiles: '$(Build.SourcesDirectory)/*.tfvars'
+              targetFiles: '$(System.DefaultWorkingDirectory)/*.tfvars'
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
@@ -47,14 +47,14 @@ stages:
               backendAzureRmContainerName: $(azureRmContainerName)
               backendAzureRmKey: $(tfstatefile)
               allowTelemetryCollection: true
-              workingDirectory: $(Build.SourcesDirectory)
+              workingDirectory: $(System.DefaultWorkingDirectory)
 
           - task: TerraformCLI@0
             displayName: "terraform plan"
             enabled: true
             inputs:
               command: 'plan'
-              workingDirectory: $(Build.SourcesDirectory)
+              workingDirectory: $(System.DefaultWorkingDirectory)
               environmentServiceName: $(serviceconn_name)
               commandOptions: '-out=tfplan'
               allowTelemetryCollection: true
@@ -64,7 +64,7 @@ stages:
             enabled: true  
             inputs:
               command: 'apply'
-              workingDirectory: $(Build.SourcesDirectory)
+              workingDirectory: $(System.DefaultWorkingDirectory)
               environmentServiceName: $(serviceconn_name)
               commandOptions: 'tfplan'
               allowTelemetryCollection: true
@@ -75,7 +75,7 @@ stages:
             enabled: true
             inputs:
               command: 'destroy'
-              workingDirectory: $(Build.SourcesDirectory)
+              workingDirectory: $(System.DefaultWorkingDirectory)
               environmentServiceName: $(serviceconn_name)
               allowTelemetryCollection: true
             condition: and(succeeded(), eq(variables['TerraformDestroy'], 'True'))
