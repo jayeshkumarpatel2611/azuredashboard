@@ -31,8 +31,11 @@ stages:
             inputs:
               targetFiles: '$(System.DefaultWorkingDirectory)/terraform.tfvars'
               escapeType: none
-              tokenPrefix: '#{'
-              tokenSuffix: '}#'
+              encoding: utf-8
+              keepToken: false
+              actionOnMissing: 'warn'
+              tokenPrefix: '~{'
+              tokenSuffix: '}~'
               verbosity: detailed
 
   - stage: 
