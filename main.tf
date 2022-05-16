@@ -4,21 +4,17 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.5.0"
     }
-    
+  }
   backend "azurerm" {
     resource_group_name  = __backend_resource_group__
     storage_account_name = __backend_storage_account__
     container_name       = __backend_container_name__
     key                  = __backend_tfstate_file_name__
   }
-  }
 }
 
 provider "azurerm" {
-
-  features {
-
-  }
+  features {}
 }
 
 module "Performance_Analysis" {
