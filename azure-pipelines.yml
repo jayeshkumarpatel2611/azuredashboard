@@ -31,8 +31,8 @@ stages:
             inputs:
               targetFiles: '$(System.DefaultWorkingDirectory)/*.tfvars'
               escapeType: none
-              tokenPrefix: '__'
-              tokenSuffix: '__'
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
 
   - stage: 
     displayName: "Deploying Terraform Resources"
