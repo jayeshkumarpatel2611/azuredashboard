@@ -1,35 +1,77 @@
-parameters:
-- name: azureSubscriptionId
-  type: string
-  default: '2daf7420-f7f4-4e0f-8a65-8dd8f147545b'
+
 variables:
   location: 'East US 2'
+  AppInsights: 'poh-4-f8c75af9-d48f-4600-9db9-00d1325b865a-client1-dev-ai'
+  subscriptionid: '2daf7420-f7f4-4e0f-8a65-8dd8f147545b'
+  environmentname: 'dev'
+  clientname: 'client1'
   resourcegroupname: 'POH'
-  terraformstorageaccount: 'My'
-  terraformstoragerg: 'POH'
-  subscription: ${{ parameters.azureSubscriptionId }}
+  idntenantid: 'f8c75af9-d48f-4600-9db9-00d1325b865a'
+  envcode: '4'
+  serviceconn_name: 'AzureConnection'
 
 stages:
   - stage: 
     displayName: "Preparing terraform.tfvars"
     
     jobs:
-      - job:
-       
+      - job:     
         steps:
           - task: replacetokens@5
             displayName: 'Replace tokens in terraform files **/*.tfvars'
             inputs:
-              targetFiles: '**/*.tfvars'
+              targetFiles: '$(Build.SourcesDirectory)/*.tfvars'
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
 
-          - template: ../../../../templates/terraform-deploy.yml
-            parameters:
-              working_dir: "$(Build.SourcesDirectory)/terraform/environments/nonprod/envgroup"
-              serviceconn_name : $(Azure_Service_Connection)
-              tfresourcegroupname : $(Shared_Resource_Group)
-              tfstorageaccountname : $(TfState_StorageAccount)
-              azureRmContainerName : $(TfState_StorageContainer)
-              tfstatefile : "poh-${{ variables.environment}}-${{ variables.environment_resource_group }}.tfstate"
+  - stage: 
+    displayName: "Deploying Terraform Resources"
+    
+    jobs:
+      - job:
+        steps:
+          - task: TerraformCLI@0
+            displayName: "terraform init"
+            enabled: true
+            inputs:
+              command: "init"
+              backendServiceArm: $(serviceconn_name)
+              backendType: "azurerm"
+              backendAzureRmResourceGroupName: $(tfresourcegroupname)
+              backendAzureRmStorageAccountName: $(tfstorageaccountname)
+              backendAzureRmContainerName: $(azureRmContainerName)
+              backendAzureRmKey: $(tfstatefile)
+              allowTelemetryCollection: true
+              workingDirectory: $(Build.SourcesDirectory)
+
+          - task: TerraformCLI@0
+            displayName: "terraform plan"
+            enabled: true
+            inputs:
+              command: 'plan'
+              workingDirectory: $(Build.SourcesDirectory)
+              environmentServiceName: $(serviceconn_name)
+              commandOptions: '-out=tfplan'
+              allowTelemetryCollection: true
+                      
+          - task: TerraformCLI@0
+            displayName: "terraform apply"
+            enabled: true  
+            inputs:
+              command: 'apply'
+              workingDirectory: $(Build.SourcesDirectory)
+              environmentServiceName: $(serviceconn_name)
+              commandOptions: 'tfplan'
+              allowTelemetryCollection: true
+            condition: and(succeeded(), eq(variables['TerraformApply'], 'True'))
+
+          - task: TerraformCLI@0
+            displayName: "terraform destroy"
+            enabled: true
+            inputs:
+              command: 'destroy'
+              workingDirectory: $(Build.SourcesDirectory)
+              environmentServiceName: $(serviceconn_name)
+              allowTelemetryCollection: true
+            condition: and(succeeded(), eq(variables['TerraformDestroy'], 'True'))
