@@ -1,0 +1,18 @@
+parameters:
+  - name: working_dir
+    type: string
+
+  - name: azureRmContainerName
+    type: string
+
+  - name: tfstatefile
+    type: string
+
+  - name: serviceconn_name
+    type: string
+
+  - name: tfresourcegroupname
+    type: string
+
+  - name: tfstorageaccountname
+    type: string
