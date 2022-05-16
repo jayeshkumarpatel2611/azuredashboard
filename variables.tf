@@ -49,3 +49,23 @@ variable "env_code" {
   description = "Environment Code"
   type        = string
 }
+
+variable "backend_resource_group" {
+    description = "Name of Backend ResourceGroup"
+    type = string
+}
+
+variable "backend_storage_account" {
+    description = "Name of Storage Account"
+    type = string
+}
+
+variable "backend_container_name" {
+    description = "Name of Storage Container"
+    type = string
+}
+
+variable "backend_tfstate_file_name" {
+    description = "Name of Storage Container"
+    type = string
+}
