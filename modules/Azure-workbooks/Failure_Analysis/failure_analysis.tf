@@ -4,7 +4,7 @@ resource "azurerm_resource_group_template_deployment" "Failure_Analysis" {
 
   name                = "Failure_Analysis"
 
-  resource_group_name = var.resource_group_name
+  resource_group_name = ${var.resource_group_name}
 
   template_content    = file("${path.module}/Failure_Analysis.json")
 
