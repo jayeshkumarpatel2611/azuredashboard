@@ -20,7 +20,7 @@ variables:
 
 stages:           
   - stage: 
-    displayName: "Preparing Terraform variables"
+    displayName: "Deploying Terraform Resources"
  
     jobs:
       - job: 
@@ -30,8 +30,8 @@ stages:
             displayName: preparing_terraform.tfvars_and_main.tf
             inputs:
                 targetFiles: | 
-                  **/*.tfvars
-                  **/*.tf
+                  **/terraform.tfvars
+                  **/main.tf
                 encoding: 'auto'
                 tokenPattern: 'custom'
                 tokenPrefix: '#{'
@@ -61,27 +61,7 @@ stages:
                 targetType: 'inline'
                 script: |
                     get-content $(build.sourcesdirectory)/main.tf   
-          - task: CopyFiles@2
-            displayName: 'Copy Terraform.tfvars' 
-            enabled: true
-            inputs:
-              contents: 'terraform.tfvars'
-              targetFolder: $(System.DefaultWorkingDirectory)
-              sourceFolder: $(build.sourcesdirectory)/terraform.tfvars
-          - task: CopyFiles@2
-            displayName: 'Copy main.tf' 
-            enabled: true
-            inputs:
-              contents: 'main.tf'
-              targetFolder: $(System.DefaultWorkingDirectory)
-              sourceFolder: $(build.sourcesdirectory)/main.tf
-  - stage: 
-    displayName: "Deploying Terraform Resources"
-    
-    jobs: 
-      - job: 
-        timeoutInMinutes: 180
-        steps:          
+
           - task: TerraformCLI@0
             displayName: "terraform init"
             enabled: true
