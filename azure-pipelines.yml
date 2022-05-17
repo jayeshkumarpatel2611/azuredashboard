@@ -30,8 +30,8 @@ stages:
             displayName: preparing_terraform.tfvars_and_main.tf
             inputs:
                 targetFiles: | 
-                  '**/*.tfvars'
-                  '**/*.tf'
+                  '$(System.DefaultWorkingDirectory)/terraform.tfvars'
+                  '$(System.DefaultWorkingDirectory)/main.tf'
                 encoding: 'auto'
                 tokenPattern: 'custom'
                 tokenPrefix: '#{'
