@@ -29,7 +29,11 @@ resource "azurerm_resource_group_template_deployment" "Failure_Analysis" {
     "Location" = {
       value = var.location
     }
-
+    
+    "DashboardRG" = {
+      
+      value = var.DashboardRG
+    }  
   })
 
   deployment_mode = "Incremental"
