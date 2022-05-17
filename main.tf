@@ -83,6 +83,7 @@ module "Azure-dashboard" {
   idn_tenant_id             = var.idn_tenant_id
   env_code                  = var.env_code
   DashboardRG               = var.DashboardRG
+  subscription_name         = data.azurerm_subscription.current.display_name
   
   Performance_workbookId    = module.Performance_Analysis.perf_wb_id
   Failure_workbookId        = module.Failure_Analysis.failure_wb_id
