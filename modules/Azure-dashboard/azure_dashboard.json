@@ -1517,14 +1517,13 @@
       "value": {
         "MsPortalFx_TimeRange": {
           "model": {
-             "format": "utc",
-             "granularity": "30m",
-              "relative": "24h"
+            "format": "utc",
+            "granularity": "30m",
+             "relative": "24h"
           },
           "displayCache": {
             "name": "UTC Time",
             "value": "Past 24 hours"
-          }
           },
           "filteredPartIds": [
             "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0a9",
@@ -1544,4 +1543,6 @@
       }
     }
   }
+}
+
 }
