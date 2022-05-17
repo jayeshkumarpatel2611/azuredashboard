@@ -40,6 +40,12 @@ variable "subscription_id" {
   description = "Subscription Id"
 }
 
+variable "subscription_name" {
+  
+  type = string
+  description = "Subscription name"
+}
+
 variable "idn_tenant_id" {
   description = "IDN Tenant ID"
   type        = string
