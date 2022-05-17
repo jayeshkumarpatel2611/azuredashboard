@@ -20,8 +20,8 @@ variables:
 
 stages:           
   - stage: 
-    displayName: "Deploying Terraform Resources"
-    
+    displayName: "Preparing Terraform variables"
+ 
     jobs:
       - job: 
         timeoutInMinutes: 180
@@ -54,4 +54,77 @@ stages:
                 script: |
                     get-content $(build.sourcesdirectory)/terraform.tfvars     
 
-            
+          - task: PowerShell@2
+            displayName: 'Display main.tfvars File' 
+            enabled: true
+            inputs:
+                targetType: 'inline'
+                script: |
+                    get-content $(build.sourcesdirectory)/main.tfvars   
+  
+  - stage: 
+    displayName: "Deploying Terraform Resources"
+    
+    jobs: 
+      - job: 
+        timeoutInMinutes: 180
+        steps:
+          - task: CopyFiles@2
+            displayName: 'Copy Terraform.tfvars' 
+            enabled: true
+            inputs:
+              contents: 'terraform.tfvars'
+              targetFolder: $(Build.ArtifactStagingDirectory)
+              sourceFolder: $(build.sourcesdirectory)
+          - task: CopyFiles@2
+            displayName: 'Copy main.tf' 
+            enabled: true
+            inputs:
+              contents: 'main.tf'
+              targetFolder: $(Build.ArtifactStagingDirectory)
+              sourceFolder: $(build.sourcesdirectory)
+          
+          - task: TerraformCLI@0
+            displayName: "terraform init"
+            enabled: true
+            inputs:
+              command: "init"
+              backendServiceArm: $(serviceconn_name)
+              backendType: "azurerm"
+              backendAzureRmResourceGroupName: $(backend_resource_group)
+              backendAzureRmStorageAccountName: $(backend_storage_account)
+              backendAzureRmContainerName: $(backend_container_name)
+              backendAzureRmKey: $(backend_tfstate_file_name)
+              allowTelemetryCollection: true
+              workingDirectory: $(System.DefaultWorkingDirectory)
+
+          - task: TerraformCLI@0
+            displayName: "terraform plan"
+            enabled: true
+            inputs:
+              command: 'plan'
+              workingDirectory: $(System.DefaultWorkingDirectory)
+              environmentServiceName: $(serviceconn_name)
+              commandOptions: '--out=tfplan'
+              allowTelemetryCollection: true
+                      
+          - task: TerraformCLI@0
+            displayName: "terraform apply"
+            enabled: true  
+            inputs:
+              command: 'apply'
+              workingDirectory: $(System.DefaultWorkingDirectory)
+              environmentServiceName: $(serviceconn_name)
+              commandOptions: 'tfplan'
+              allowTelemetryCollection: true
+            condition: and(succeeded(), eq(variables['TerraformApply'], 'True'))
+
+          - task: TerraformCLI@0
+            displayName: "terraform destroy"
+            enabled: true
+            inputs:
+              command: 'destroy'
+              workingDirectory: $(System.DefaultWorkingDirectory)
+              environmentServiceName: $(serviceconn_name)
+              allowTelemetryCollection: true
+            condition: and(succeeded(), eq(variables['TerraformDestroy'], 'True'))
