@@ -15,7 +15,7 @@ data "template_file" "json-template" {
 
 resource "azurerm_portal_dashboard" "my-dashboard" {
   name                 = "poh-${var.env_code}-${var.idn_tenant_id}-${var.client_name}-${var.environment_name}-dash"
-  resource_group_name  = var.resource_group_name
+  resource_group_name = var.DashboardRG
   location             = var.location
   dashboard_properties = data.template_file.json-template.rendered
 }
