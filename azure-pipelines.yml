@@ -31,7 +31,6 @@ stages:
                 enableRecursion: false
                 useLegacyPattern: false
                 enableTelemetry: true
-
           - task: PowerShell@2
             displayName: 'Display Terraform.tfvars File' 
             enabled: true
@@ -71,6 +70,7 @@ stages:
               environmentServiceName: $(serviceconn_name)
               commandOptions: '--out=tfplan'
               allowTelemetryCollection: true
+            condition: succeeded()
                       
           - task: TerraformCLI@0
             displayName: "terraform apply"
