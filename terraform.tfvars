@@ -1,6 +1,6 @@
 location             = "#{location}#"
 AppInsights          = "#{AppInsights}#"
-subscription_id      = "#{subscription_id}#"
+# subscription_id      = "#{subscription_id}#"
 environment_name     = "#{environment_name}#"
 client_name          = "#{client_name}#"
 resource_group_name  = "#{resource_group_name}#"
