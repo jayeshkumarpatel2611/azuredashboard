@@ -1525,6 +1525,10 @@
             "name": "UTC Time",
             "value": "Past 24 hours"
           },
+          "autoRefresh": {
+             "name": "Auto refresh",
+             "value": "Every 30 minutes"
+          },
           "filteredPartIds": [
             "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0a9",
             "StartboardPart-AppMapGalPt-e3f7cea7-8fae-410d-a571-847661c1a0ab",
