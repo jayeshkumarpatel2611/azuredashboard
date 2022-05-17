@@ -29,9 +29,7 @@ stages:
           - task: replacetokens@5
             displayName: 'Replace tokens in terraform files $(System.DefaultWorkingDirectory)/*.tfvars'
             inputs:
-              targetFiles: | 
-                '**/*.tf'
-                '**/*.tfvars'
+              targetFiles: '**/*.tfvars'
               escapeType: none
               encoding: auto
               keepToken: false
