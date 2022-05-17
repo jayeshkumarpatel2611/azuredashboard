@@ -4,7 +4,7 @@ resource "azurerm_resource_group_template_deployment" "Performance_Analysis" {
 
   name                = "Performance_Analysis"
 
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.DashboardRG
 
   template_content    = file("${path.module}/Performance_Analysis.json")
 
@@ -24,10 +24,6 @@ resource "azurerm_resource_group_template_deployment" "Performance_Analysis" {
 
     "ResourceGroup" = {
       value = var.resource_group_name
-    }
-    
-    "DashboardRG" = {  
-      value = var.DashboardRG    
     }
 
     "Location" = {
