@@ -7,8 +7,9 @@ stages:
   - stage: 
     displayName: "Deploying Terraform Resources"
  
-    jobs:
+    jobs: 
       - job: 
+        displayName: "Azure Workbooks and Dashboard Deployment"
         timeoutInMinutes: 180
         steps:
           - task: replacetokens@5
