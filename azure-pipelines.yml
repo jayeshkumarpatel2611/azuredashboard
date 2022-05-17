@@ -30,8 +30,8 @@ stages:
             displayName: 'Replace tokens in terraform files $(System.DefaultWorkingDirectory)/*.tfvars'
             inputs:
               targetFiles: | 
-                'main.tf'
-                'terraform.tfvars'
+                '**/*.tf'
+                '**/*.tfvars'
               escapeType: none
               encoding: auto
               keepToken: false
