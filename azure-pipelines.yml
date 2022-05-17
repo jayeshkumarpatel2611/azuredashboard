@@ -27,23 +27,6 @@ stages:
         timeoutInMinutes: 180    
         steps:
           - task: replacetokens@5
-            displayName: 'Replace tokens in terraform files $(System.DefaultWorkingDirectory)/*.tfvars'
-            inputs:
-              targetFiles: '$(System.DefaultWorkingDirectory)/terraform.tfvars'
-              escapeType: none
-              tokenPrefix: '~{'
-              tokenSuffix: '}~'
-              verbosity: detailed
-
-  - stage: 
-    displayName: "Deploying Terraform Resources"
-    
-    jobs:
-      - job: terraform_provisioning
-        timeoutInMinutes: 180
-        steps:
-        
-          - task: replacetokens@5
             displayName: preparing_terraform.tfvars_and_main.tf
             inputs:
                 targetFiles: | 
@@ -51,8 +34,8 @@ stages:
                   '**/*.tf'
                 encoding: 'auto'
                 tokenPattern: 'custom'
-                tokenPrefix: '~{'
-                tokenSuffix: '}~'
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
                 writeBOM: true
                 verbosity: 'detailed'
                 actionOnMissing: 'warn'
@@ -62,6 +45,14 @@ stages:
                 enableRecursion: false
                 useLegacyPattern: false
                 enableTelemetry: true
+
+  - stage: 
+    displayName: "Deploying Terraform Resources"
+    
+    jobs:
+      - job: terraform_provisioning
+        timeoutInMinutes: 180
+        steps:
           - task: TerraformCLI@0
             displayName: "terraform init"
             enabled: true
