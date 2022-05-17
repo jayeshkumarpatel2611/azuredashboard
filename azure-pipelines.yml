@@ -18,34 +18,7 @@ variables:
   backend_container_name: 'terraform'
   backend_tfstate_file_name: 'terraform.tfstate'
 
-stages:
-  - stage: 
-    displayName: "Preparing terraform.tfvars"
-    
-    jobs:
-      - job: preparing_terraform_tfvars
-        timeoutInMinutes: 180    
-        steps:
-          - task: replacetokens@5
-            displayName: preparing_terraform.tfvars_and_main.tf
-            inputs:
-                targetFiles: | 
-                  **/*.tfvars
-                  **/*.tf
-                encoding: 'auto'
-                tokenPattern: 'custom'
-                tokenPrefix: '#{'
-                tokenSuffix: '}#'
-                writeBOM: true
-                verbosity: 'detailed'
-                actionOnMissing: 'warn'
-                keepToken: false
-                actionOnNoFiles: 'continue'
-                enableTransforms: false
-                enableRecursion: false
-                useLegacyPattern: false
-                enableTelemetry: true
-            
+stages:           
   - stage: 
     displayName: "Deploying Terraform Resources"
     
@@ -73,6 +46,7 @@ stages:
                 enableRecursion: false
                 useLegacyPattern: false
                 enableTelemetry: true
+          
           - task: TerraformCLI@0
             displayName: "terraform init"
             enabled: true
@@ -94,7 +68,7 @@ stages:
               command: 'plan'
               workingDirectory: $(System.DefaultWorkingDirectory)
               environmentServiceName: $(serviceconn_name)
-              commandOptions: '--out=$(System.DefaultWorkingDirectory)/plan.tfplan'
+              commandOptions: '--out=tfplan'
               allowTelemetryCollection: true
                       
           - task: TerraformCLI@0
