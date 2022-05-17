@@ -25,6 +25,10 @@ resource "azurerm_resource_group_template_deployment" "Usage_Analysis" {
     "ResourceGroup" = {
       value = var.resource_group_name
     }
+    
+    "DashboardRG" = {  
+      value = var.DashboardRG    
+    }
 
     "Location" = {
       value = var.location
