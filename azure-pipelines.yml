@@ -53,6 +53,26 @@ stages:
       - job: terraform_provisioning
         timeoutInMinutes: 180
         steps:
+        
+          - task: replacetokens@5
+            displayName: preparing_terraform.tfvars_and_main.tf
+            inputs:
+                targetFiles: | 
+                  **/*.tfvars
+                  **/*.tf
+                encoding: 'auto'
+                tokenPattern: 'custom'
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
+                writeBOM: true
+                verbosity: 'detailed'
+                actionOnMissing: 'warn'
+                keepToken: false
+                actionOnNoFiles: 'continue'
+                enableTransforms: false
+                enableRecursion: false
+                useLegacyPattern: false
+                enableTelemetry: true
           - task: TerraformCLI@0
             displayName: "terraform init"
             enabled: true
