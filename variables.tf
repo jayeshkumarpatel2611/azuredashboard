@@ -34,17 +34,7 @@ variable "AppInsights" {
   
 }
 
-variable "subscription_id" {
-  
-  type = string
-  description = "Subscription Id"
-}
 
-variable "subscription_name" {
-  
-  type = string
-  description = "Subscription name"
-}
 
 variable "idn_tenant_id" {
   description = "IDN Tenant ID"
