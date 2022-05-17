@@ -12,7 +12,7 @@ variables:
   resource_group_name: $(RESOURCE_GROUP_NAME)
   idn_tenant_id: $(IDN_TENANT_ID)
   env_code: $(ENV_CODE)
-  serviceconn_name: variables['serviceconn_name']
+  serviceconn_name: 'AzureConnection'
   backend_resource_group: $(BACKEND_RESOURCE_GROUP)
   backend_storage_account: $(BACKEND_STORAGE_ACCOUNT)
   backend_container_name: $(BACKEND_CONTAINER_NAME)
