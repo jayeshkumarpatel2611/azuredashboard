@@ -75,14 +75,14 @@ stages:
             inputs:
               contents: 'terraform.tfvars'
               targetFolder: $(Build.ArtifactStagingDirectory)
-              sourceFolder: $(build.sourcesdirectory)
+              sourceFolder: $(build.sourcesdirectory)/terraform.tfvars
           - task: CopyFiles@2
             displayName: 'Copy main.tf' 
             enabled: true
             inputs:
               contents: 'main.tf'
               targetFolder: $(Build.ArtifactStagingDirectory)
-              sourceFolder: $(build.sourcesdirectory)
+              sourceFolder: $(build.sourcesdirectory)/main.tf
           
           - task: TerraformCLI@0
             displayName: "terraform init"
