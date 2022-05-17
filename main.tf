@@ -18,8 +18,6 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_subscription" "current" {}
-
 module "Performance_Analysis" {
   
   source = "./modules/Azure-workbooks/Performance_Analysis"
