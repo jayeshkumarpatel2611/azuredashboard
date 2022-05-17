@@ -4,19 +4,19 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  location: 'eastus'
-  AppInsights: 'poh-4-f8c75af9-d48f-4600-9db9-00d1325b865a-client1-dev-ai'
-  subscription_id: '2daf7420-f7f4-4e0f-8a65-8dd8f147545b'
-  environment_name: 'dev'
-  client_name: 'client1'
-  resource_group_name: 'POH'
-  idn_tenant_id: 'f8c75af9-d48f-4600-9db9-00d1325b865a'
-  env_code: '4'
-  serviceconn_name: 'AzureConnection'
-  backend_resource_group: 'POH'
-  backend_storage_account: 'tfstorageac15'
-  backend_container_name: 'terraform'
-  backend_tfstate_file_name: 'terraform.tfstate'
+  location: $(location)
+  AppInsights: $(AppInsights)
+  subscription_id: $(subscription_id)
+  environment_name: $(environment_name)
+  client_name: $(client_name)
+  resource_group_name: $(resource_group_name)
+  idn_tenant_id: $(idn_tenant_id)
+  env_code: $(env_code)
+  serviceconn_name: $(serviceconn_name)
+  backend_resource_group: $(backend_resource_group)
+  backend_storage_account: $(backend_storage_account)
+  backend_container_name: $(backend_container_name)
+  backend_tfstate_file_name: $(backend_tfstate_file_name)
 
 stages:           
   - stage: 
