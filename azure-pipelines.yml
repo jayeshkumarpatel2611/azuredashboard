@@ -23,10 +23,9 @@ stages:
     displayName: "Deploying Terraform Resources"
     
     jobs:
-      - job: updatingInputVariables
+      - job: 
         timeoutInMinutes: 180
         steps:
-        
           - task: replacetokens@5
             displayName: preparing_terraform.tfvars_and_main.tf
             inputs:
@@ -47,53 +46,12 @@ stages:
                 useLegacyPattern: false
                 enableTelemetry: true
 
-      - job: terraform_provisioning
-        timeoutInMinutes: 180
-        dependsOn: updatingInputVariables
-        steps:
-                
-          - task: TerraformCLI@0
-            displayName: "terraform init"
+          - task: PowerShell@2
+            displayName: 'Display Terraform.tfvars File' 
             enabled: true
             inputs:
-              command: "init"
-              backendServiceArm: $(serviceconn_name)
-              backendType: "azurerm"
-              backendAzureRmResourceGroupName: $(backend_resource_group)
-              backendAzureRmStorageAccountName: $(backend_storage_account)
-              backendAzureRmContainerName: $(backend_container_name)
-              backendAzureRmKey: $(backend_tfstate_file_name)
-              allowTelemetryCollection: true
-              workingDirectory: $(System.DefaultWorkingDirectory)
+                targetType: 'inline'
+                script: |
+                    get-content $(build.sourcesdirectory)/terraform.tfvars     
 
-          - task: TerraformCLI@0
-            displayName: "terraform plan"
-            enabled: true
-            inputs:
-              command: 'plan'
-              workingDirectory: $(System.DefaultWorkingDirectory)
-              environmentServiceName: $(serviceconn_name)
-              commandOptions: '--out=tfplan'
-              allowTelemetryCollection: true
-                      
-          - task: TerraformCLI@0
-            displayName: "terraform apply"
-            enabled: true  
-            inputs:
-              command: 'apply'
-              workingDirectory: $(System.DefaultWorkingDirectory)
-              environmentServiceName: $(serviceconn_name)
-              commandOptions: 'tfplan'
-              allowTelemetryCollection: true
-            condition: and(succeeded(), eq(variables['TerraformApply'], 'True'))
-
-          - task: TerraformCLI@0
-            displayName: "terraform destroy"
-            enabled: true
-            inputs:
-              command: 'destroy'
-              workingDirectory: $(System.DefaultWorkingDirectory)
-              environmentServiceName: $(serviceconn_name)
-              allowTelemetryCollection: true
-            condition: and(succeeded(), eq(variables['TerraformDestroy'], 'True'))
             
