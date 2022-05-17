@@ -30,6 +30,7 @@ module "Performance_Analysis" {
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
   env_code                  = var.env_code
+  DashboardRG               = var.DashboardRG
 
 }
 
@@ -45,6 +46,7 @@ module "Failure_Analysis" {
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
   env_code                  = var.env_code
+  DashboardRG               = var.DashboardRG
 
 }
 
@@ -60,6 +62,7 @@ module "Usage_Analysis" {
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
   env_code                  = var.env_code
+  DashboardRG               = var.DashboardRG
 
 }
 
@@ -76,6 +79,7 @@ module "Azure-dashboard" {
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
   env_code                  = var.env_code
+  DashboardRG               = var.DashboardRG
   
   Performance_workbookId    = module.Performance_Analysis.perf_wb_id
   Failure_workbookId        = module.Failure_Analysis.failure_wb_id
