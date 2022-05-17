@@ -55,12 +55,12 @@ stages:
                     get-content $(build.sourcesdirectory)/terraform.tfvars     
 
           - task: PowerShell@2
-            displayName: 'Display main.tfvars File' 
+            displayName: 'Display main.tf File' 
             enabled: true
             inputs:
                 targetType: 'inline'
                 script: |
-                    get-content $(build.sourcesdirectory)/main.tfvars   
+                    get-content $(build.sourcesdirectory)/main.tf   
   
   - stage: 
     displayName: "Deploying Terraform Resources"
