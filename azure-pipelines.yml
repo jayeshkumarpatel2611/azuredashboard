@@ -30,8 +30,8 @@ stages:
             displayName: preparing_terraform.tfvars_and_main.tf
             inputs:
                 targetFiles: | 
-                  '$(System.DefaultWorkingDirectory)/terraform.tfvars'
-                  '$(System.DefaultWorkingDirectory)/main.tf'
+                  **/*.tfvars
+                  **/*.tf
                 encoding: 'auto'
                 tokenPattern: 'custom'
                 tokenPrefix: '#{'
@@ -45,7 +45,7 @@ stages:
                 enableRecursion: false
                 useLegacyPattern: false
                 enableTelemetry: true
-
+            
   - stage: 
     displayName: "Deploying Terraform Resources"
     
