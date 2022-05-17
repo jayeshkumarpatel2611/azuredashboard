@@ -13,7 +13,7 @@ stages:
         timeoutInMinutes: 180
         steps:
           - task: replacetokens@5
-            displayName: preparing_terraform.tfvars_and_main.tf
+            displayName: Preparing_terraform.tfvars_and_main.tf
             inputs:
                 targetFiles: | 
                   **/terraform.tfvars
