@@ -18,6 +18,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_subscription" "current" {}
+
 module "Performance_Analysis" {
   
   source = "./modules/Azure-workbooks/Performance_Analysis"
@@ -25,7 +27,7 @@ module "Performance_Analysis" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   AppInsights               = var.AppInsights
-  subscription_id           = var.subscription_id
+  subscription_id           = ${data.azurerm_subscription.current.subscription_id}
   environment_name          = var.environment_name
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
@@ -41,7 +43,7 @@ module "Failure_Analysis" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   AppInsights               = var.AppInsights
-  subscription_id           = var.subscription_id
+  subscription_id           = ${data.azurerm_subscription.current.subscription_id}
   environment_name          = var.environment_name
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
@@ -57,7 +59,7 @@ module "Usage_Analysis" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   AppInsights               = var.AppInsights
-  subscription_id           = var.subscription_id
+  subscription_id           = ${data.azurerm_subscription.current.subscription_id}
   environment_name          = var.environment_name
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
@@ -74,7 +76,7 @@ module "Azure-dashboard" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   AppInsights               = var.AppInsights
-  subscription_id           = var.subscription_id
+  subscription_id           = ${data.azurerm_subscription.current.subscription_id}
   environment_name          = var.environment_name
   client_name               = var.client_name
   idn_tenant_id             = var.idn_tenant_id
