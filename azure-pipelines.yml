@@ -31,21 +31,6 @@ stages:
                 enableRecursion: false
                 useLegacyPattern: false
                 enableTelemetry: true
-          - task: PowerShell@2
-            displayName: 'Display Terraform.tfvars File' 
-            enabled: true
-            inputs:
-                targetType: 'inline'
-                script: |
-                    get-content $(build.sourcesdirectory)/terraform.tfvars     
-
-          - task: PowerShell@2
-            displayName: 'Display main.tf File' 
-            enabled: true
-            inputs:
-                targetType: 'inline'
-                script: |
-                    get-content $(build.sourcesdirectory)/main.tf   
 
           - task: TerraformCLI@0
             displayName: "terraform init"
