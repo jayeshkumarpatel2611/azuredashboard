@@ -1527,7 +1527,7 @@
           },
           "autoRefresh": {
              "name": "Auto refresh",
-             "value": "Every 30 minutes"
+             "value": "30m"
           },
           "filteredPartIds": [
             "StartboardPart-PinnedNotebookQueryPart-e3f7cea7-8fae-410d-a571-847661c1a0a9",
