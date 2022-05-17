@@ -1,5 +1,13 @@
 # Variables Declaration
 
+variable "DashboardRG" {
+
+type = string
+
+description = "Resource group name for Dashboard"
+
+}
+
 variable "resource_group_name" {
 
 type = string
