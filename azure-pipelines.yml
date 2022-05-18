@@ -22,15 +22,7 @@ stages:
                 tokenPattern: 'custom'
                 tokenPrefix: '#{'
                 tokenSuffix: '}#'
-                writeBOM: true
                 verbosity: 'detailed'
-                actionOnMissing: 'warn'
-                keepToken: false
-                actionOnNoFiles: 'continue'
-                enableTransforms: false
-                enableRecursion: false
-                useLegacyPattern: false
-                enableTelemetry: true
 
           - task: TerraformCLI@0
             displayName: "terraform init"
